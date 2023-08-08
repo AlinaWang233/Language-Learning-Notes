@@ -81,7 +81,7 @@ log, metric, tracing, 内置观测性服务
 
 ## RPC at Tiktok
 ![Alt text](http_img/kitex.png)
-自研网络库Netpoll
+自研网络库
 背景：
 - 原生库无法感知连接状态（影响连接池复用）
 - 存在goroutine暴涨的风险（一个连接一个goroutine，连接利用率底下，占用调度）
@@ -90,6 +90,12 @@ log, metric, tracing, 内置观测性服务
 - goroutine池
 - 其他：nocopy buffer（编解码层零拷贝）
 扩展性: ![Alt text](http_img/extend.png)
+
+编解码优化：
+- codegen： 预计算并预分配内存， inline减少函数调用和不必要的反射，自研thriftgo实现thrift idl解析和代码生成器
+- JIT(just in time)：改善用户体验，更强编解码性能，减轻用户维护生成代码的负担=>frugal
+
+
 合并部署
 微服务过微，传输和序列化开销越来越大-》将亲和性强的服务实力尽可能和调度到同一个物理机（远处RPC-》本地RPC）
 
